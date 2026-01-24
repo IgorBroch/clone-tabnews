@@ -15,11 +15,13 @@ async function query(queryObject) {
     await client.connect();
     console.log("Connected successfully!");
     const result = await client.query(queryObject);
-    await client.end();
+
     return result;
   } catch (error) {
     console.error("Connection failed:", error.message);
     throw error;
+  } finally {
+    await client.end();
   }
 }
 
