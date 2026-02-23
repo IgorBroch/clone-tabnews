@@ -10,7 +10,10 @@ async function query(queryObject) {
     console.error("Connection failed:", error.message);
     throw error;
   } finally {
-    await client.end();
+    if (client) {
+      // ← only call end() if client was successfully created
+      await client.end();
+    }
   }
 }
 
@@ -34,7 +37,8 @@ export default {
 };
 
 function getSSLValues() {
-  process.env.NODE_ENV === "production"
-    ? true // Production: strict SSL
-    : { rejectUnauthorized: false };
+  if (process.env.NODE_ENV === "production") {
+    return true;
+  }
+  return { rejectUnauthorized: false };
 }
