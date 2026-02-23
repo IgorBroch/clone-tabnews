@@ -5,6 +5,7 @@ async function status(request, response) {
 
   const databaseVersionResult = await database.query("SHOW server_version;");
   const databaseVersionValue = databaseVersionResult.rows[0].server_version;
+  const databaseMajorVersion = databaseVersionValue.split(".")[0]; // Extract "16" from "16.11 (f45eb12)"
 
   const databaseName = process.env.POSTGRES_DB;
   const databaseOpenedConnectionsResult = await database.query({
@@ -25,7 +26,7 @@ async function status(request, response) {
     updated_at: updatedAt,
     dependencies: {
       database: {
-        version: databaseVersionValue,
+        version: databaseMajorVersion, // Changed: now returns just "16"
         max_connections: parseInt(databaseMaxConnectionsValue),
         opened_connections: databaseOpenedCOnnectionsValue,
       },
