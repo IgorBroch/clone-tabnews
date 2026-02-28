@@ -14,25 +14,32 @@ export default async function migrations(request, response) {
   };
 
   if (request.method === "GET") {
-    const pedingMigrations = await migrationsRunner(defaultMigrationOptions);
-    await dbClient.end();
-    return response.status(200).json(pedingMigrations);
+    try {
+      const pendingMigrations = await migrationsRunner(defaultMigrationOptions);
+      return response.status(200).json(pendingMigrations);
+    } catch (error) {
+      console.error("GET migration error:", error);
+      return response.status(500).json({ error: error.message });
+    } finally {
+      await dbClient.end(); // ← always closes, even on error
+    }
   }
 
   if (request.method === "POST") {
-    const migratedMigrations = await migrationsRunner({
-      ...defaultMigrationOptions,
-      dryRun: false,
-    });
-
-    await dbClient.end();
-
-    return response.status(200).json(migratedMigrations);
+    try {
+      const migratedMigrations = await migrationsRunner({
+        ...defaultMigrationOptions,
+        dryRun: false,
+      });
+      return response.status(201).json(migratedMigrations); // ← 201 for POST
+    } catch (error) {
+      console.error("POST migration error:", error);
+      return response.status(500).json({ error: error.message });
+    } finally {
+      await dbClient.end(); // ← always closes, even on error
+    }
   }
 
-  if (migratedMigrations.length > 0) {
-    return response.status(201).json(migratedMigrations);
-  }
-
-  return response.status(405).end();
+  await dbClient.end();
+  return response.status(405).end(); // ← method not allowed
 }
