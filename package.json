@@ -12,7 +12,8 @@
     "test": "jest --runInBand",
     "test:watch": "jest --watchAll",
     "migration:create": "node-pg-migrate --migrations-dir infra/migrations create",
-    "migrations:up": "node-pg-migrate -m infra/migrations --envPath .env.development up"
+    "migrations:up": "node-pg-migrate -m infra/migrations --envPath .env.development up",
+    "curl": "curl -s -X GET https://clone-tabnews-git-fix-migrations-endpoint-igor-brochs-projects.vercel.app/api/v1/migrations | python -m json.tool"
   },
   "author": "",
   "license": "MIT",

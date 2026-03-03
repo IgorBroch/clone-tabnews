@@ -40,5 +40,6 @@ function getSSLValues() {
   if (process.env.NODE_ENV === "production") {
     return true;
   }
-  return { rejectUnauthorized: false };
+  // return { rejectUnauthorized: false };
+  return false; // ← disable SSL entirely in development
 }
