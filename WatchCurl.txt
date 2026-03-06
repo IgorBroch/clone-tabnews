@@ -1,0 +1,11 @@
+
+
+export PATH="$PATH:/c/Users/igorb/AppData/Local/Microsoft/WinGet/Packages/jqlang.jq_Microsoft.Winget.Source_8wekyb3d8bbwe"
+
+while true; do
+  clear
+  echo "API status — Last checked: $(date '+%Y-%m-%d %H:%M:%S')"
+  echo "----------------------------------------"
+  curl -s https://clone-tabnews-beige-six.vercel.app/api/v1/migrations | jq .
+  sleep 2
+done
