@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run services:up && next dev",
+    "dev": "npm run services:up && npm run wait-for-postgres && npm run migrations:up && next dev",
     "services:up": "docker compose -f infra/compose.yaml up -d",
     "services:stop": "docker compose -f infra/compose.yaml stop",
     "services:down": "docker compose -f infra/compose.yaml down",
@@ -13,7 +13,7 @@
     "test:watch": "jest --watchAll",
     "migration:create": "node-pg-migrate --migrations-dir infra/migrations create",
     "migrations:up": "node-pg-migrate -m infra/migrations --envPath .env.development up",
-    "curl": "curl -s -X GET https://clone-tabnews-git-fix-migrations-endpoint-igor-brochs-projects.vercel.app/api/v1/migrations | python -m json.tool"
+    "wait-for-postgres": "node infra/scripts/wait-for-postgres.js"
   },
   "author": "",
   "license": "MIT",
