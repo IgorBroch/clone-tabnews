@@ -2,7 +2,6 @@ import database from "infra/database.js";
 
 async function status(request, response) {
   const updatedAt = new Date().toISOString();
-  let variavelEsquecida;
   const databaseVersionResult = await database.query("SHOW server_version;");
   const databaseVersionValue = databaseVersionResult.rows[0].server_version;
   const databaseMajorVersion = databaseVersionValue.split(".")[0]; // Extract "16" from "16.11 (f45eb12)"
